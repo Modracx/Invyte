@@ -1,0 +1,67 @@
+#!/usr/bin/env php
+<?php
+
+define('IMS_START', microtime(true));
+
+$baseDir = __DIR__;
+
+// Load autoloader
+require $baseDir . '/vendor/autoload.php';
+
+// Load .env
+$dotenv = Dotenv\Dotenv::createImmutable($baseDir);
+$dotenv->safeLoad();
+
+// Connect to DB
+try {
+    $pdo = new PDO(
+        sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
+            $_ENV['DB_HOST'] ?? '127.0.0.1',
+            $_ENV['DB_PORT'] ?? '3306',
+            $_ENV['DB_DATABASE'] ?? 'example.demo'
+        ),
+        $_ENV['DB_USERNAME'] ?? 'user',
+        $_ENV['DB_PASSWORD'] ?? 'password',
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        ]
+    );
+} catch (\PDOException $e) {
+    echo "DB Error: " . $e->getMessage() . "\n";
+    exit(1);
+}
+
+$command = $argv[1] ?? 'list';
+$args = array_slice($argv, 2);
+
+$commands = [
+    'migrate'          => \App\Console\Commands\MigrateCommand::class,
+    'user:create'      => \App\Console\Commands\UserCreateCommand::class,
+    'user:update'      => \App\Console\Commands\UserUpdateCommand::class,
+    'user:assign'      => \App\Console\Commands\UserAssignCommand::class,
+    'user:list'        => \App\Console\Commands\UserListCommand::class,
+    'stock:sync'       => \App\Console\Commands\StockSyncCommand::class,
+    'stock:check-low'  => \App\Console\Commands\StockCheckLowCommand::class,
+    'report:export'    => \App\Console\Commands\ReportExportCommand::class,
+];
+
+if ($command === 'list' || $command === '--help') {
+    echo "\nIMS CLI - Inventory Management System\n";
+    echo "Usage: php ims/cli <command> [arguments]\n\n";
+    echo "Available commands:\n";
+    foreach (array_keys($commands) as $cmd) {
+        echo "  php ims/cli {$cmd}\n";
+    }
+    echo "\n";
+    exit(0);
+}
+
+if (!isset($commands[$command])) {
+    echo "Unknown command: {$command}\n";
+    echo "Run 'php ims/cli list' to see available commands.\n";
+    exit(1);
+}
+
+$handler = new $commands[$command]();
+$handler->handle($pdo, $args);
