@@ -17,7 +17,7 @@ return new class {
                 `id`            BIGINT UNSIGNED  NOT NULL AUTO_INCREMENT,
                 `order_id`      INT UNSIGNED     NOT NULL,
                 `increment_id`  VARCHAR(32)      NOT NULL,
-                `status`        ENUM('draft','confirmed') NOT NULL DEFAULT 'draft',
+                `status`        VARCHAR(20)      NOT NULL DEFAULT 'draft',
                 `notes`         TEXT             NULL,
                 `created_by`    INT UNSIGNED     NULL,
                 `confirmed_by`  INT UNSIGNED     NULL,

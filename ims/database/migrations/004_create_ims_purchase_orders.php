@@ -18,7 +18,7 @@ class CreateImsPurchaseOrders
                 `id`            INT UNSIGNED  NOT NULL AUTO_INCREMENT,
                 `supplier_id`   INT UNSIGNED  NULL,
                 `source_code`   VARCHAR(255)  NOT NULL,
-                `status`        ENUM('draft','pending','partial','received','cancelled') NOT NULL DEFAULT 'draft',
+                `status`        VARCHAR(20)   NOT NULL DEFAULT 'draft',
                 `expected_date` DATE          NULL,
                 `notes`         TEXT          NULL,
                 `created_by`    INT UNSIGNED  NULL,
