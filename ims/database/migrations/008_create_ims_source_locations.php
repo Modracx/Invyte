@@ -17,7 +17,7 @@ return new class {
                 id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
                 source_code VARCHAR(255)    NOT NULL,
                 parent_id   BIGINT UNSIGNED NULL DEFAULT NULL,
-                type        ENUM('row','shelf','column') NOT NULL,
+                type        VARCHAR(20)     NOT NULL,
                 name        VARCHAR(100)    NOT NULL,
                 code        VARCHAR(50)     NOT NULL,
                 sort_order  SMALLINT        NOT NULL DEFAULT 0,

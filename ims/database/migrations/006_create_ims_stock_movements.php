@@ -18,7 +18,7 @@ class CreateImsStockMovements
                 `id`            INT UNSIGNED  NOT NULL AUTO_INCREMENT,
                 `source_code`   VARCHAR(255)  NOT NULL,
                 `sku`           VARCHAR(255)  NOT NULL,
-                `type`          ENUM('adjustment','receive','sync','transfer') NOT NULL DEFAULT 'adjustment',
+                `type`          VARCHAR(30)   NOT NULL DEFAULT 'adjustment',
                 `qty_before`    DECIMAL(12,4) NOT NULL DEFAULT 0,
                 `qty_after`     DECIMAL(12,4) NOT NULL DEFAULT 0,
                 `qty_change`    DECIMAL(12,4) NOT NULL DEFAULT 0,
